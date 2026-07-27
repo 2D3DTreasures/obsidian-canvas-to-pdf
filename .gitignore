@@ -1,0 +1,23 @@
+# Node & dependencies
+node_modules/
+package-lock.json
+
+# Environment & local OS files
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# Backups & archives
+backup-*/
+*.zip
+*.tar.gz
+*.bak
+
+# Temporary data files & scratch
+data.json
+scratch/
+*.canvas
+
+# IDE & editor system files
+.hotreload

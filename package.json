@@ -1,0 +1,20 @@
+{
+  "name": "obsidian-canvas-to-pdf",
+  "version": "1.0.0",
+  "description": "Export Obsidian canvases into clean, searchable vector PDF and HTML documents directly on your computer.",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "node esbuild.config.mjs production"
+  },
+  "keywords": [],
+  "author": "2D3DTreasures",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "esbuild": "^0.28.1",
+    "obsidian": "^1.7.2",
+    "tslib": "^2.8.1",
+    "typescript": "^6.0.3"
+  }
+}

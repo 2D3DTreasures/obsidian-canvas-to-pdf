@@ -1,0 +1,14 @@
+/* Styles for the Obsidian Canvas to PDF export modal */
+
+.canvas-to-pdf-modal .setting-item {
+    padding: 18px 0;
+}
+
+.canvas-to-pdf-modal .setting-item-name {
+    font-size: var(--font-ui-medium);
+}
+
+.canvas-to-pdf-modal .setting-item-description {
+    font-size: var(--font-ui-smaller);
+    color: var(--text-muted);
+}
