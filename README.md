@@ -1,0 +1,96 @@
+# Obsidian Canvas to PDF
+
+Export your Obsidian canvases into clean, searchable vector PDF and HTML documents directly on your computer.
+
+Convert canvas notes, connections, arrows, embedded images, web previews, and nested canvases into high-quality PDFs or standalone HTML files where text stays sharp, selectable, and copy-pasteable at any zoom level.
+
+---
+
+## 🌟 Key Features
+
+* **Searchable Text**: Text in your exported PDFs remains selectable, copy-pasteable, and searchable in any PDF viewer.
+* **Dual PDF & HTML Export**: Choose to export as a vector PDF document, a standalone HTML file, or both simultaneously.
+* **Canvas Connections & Arrows**: Keeps all connector lines, directional arrows, custom colors, and text labels exactly where they belong.
+* **Nested Canvases**: Automatically renders sub-canvases embedded inside your main canvas (up to 5 levels deep).
+* **Embedded Media**: Supports Markdown note cards, images, web link cards, YouTube video thumbnails, and embedded PDFs.
+* **100% Local & Private**: Everything runs locally on your computer with zero account creation, zero tracking, and zero cloud server dependencies.
+
+---
+
+## 💻 System Requirements
+
+* **Obsidian**: Version `v1.4.0` or newer.
+* **Desktop OS**: Windows, macOS, or Linux.
+* **Local Browser**: Google Chrome or Microsoft Edge installed on your computer.
+
+---
+
+## 🚀 Installation
+
+### Option 1: Community Plugin Store (Recommended)
+1. Open **Obsidian Settings** $\rightarrow$ **Community plugins**.
+2. Click **Browse** and search for `Canvas to PDF`.
+3. Click **Install**, then enable the plugin.
+
+### Option 2: Manual Installation
+1. Download `manifest.json`, `main.js`, and `styles.css` from the latest [GitHub Release](https://github.com/2D3DTreasures/obsidian-canvas-to-pdf/releases).
+2. Create a folder named `obsidian-canvas-to-pdf` inside your vault's `.obsidian/plugins/` directory.
+3. Move the three downloaded files into `.obsidian/plugins/obsidian-canvas-to-pdf/`.
+4. Reload Obsidian and enable **Canvas to PDF** in settings.
+
+---
+
+## 📖 Usage Guide
+
+1. Open any `.canvas` file in Obsidian.
+2. Trigger the export command using one of three methods:
+   - Click the **Export to PDF** icon in the canvas view header.
+   - Open the Command Palette (`Ctrl+P` / `Cmd+P`) and select `Canvas to PDF: Export canvas`.
+   - Right-click the active canvas tab and select `Export canvas to PDF`.
+3. Choose your settings in the export window (PDF format, auto-open, high-res web link previews) and click **Export**.
+
+---
+
+## ⚙️ Customization & Plugin Settings
+
+You can customize your export preferences in **Obsidian Settings** $\rightarrow$ **Canvas to PDF**:
+
+* **Default Export Path**: Set a default vault folder (e.g. `Exports/`) or absolute system folder.
+* **Nested Canvas Mode**: Turn sub-canvas rendering on/off and set the max recursion depth slider (1 to 5 levels).
+* **Browser Executable Path**: Specify a custom path to Chrome or Edge if installed in a non-standard location.
+* **Show File Node Labels**: Toggle title headers displayed above embedded files and images.
+
+---
+
+## 🔧 Technical Details (For Developers & Power Users)
+
+<details>
+<summary><b>Click to expand architecture & technical specifications</b></summary>
+
+<br>
+
+* **Rendering Engine**: Utilizes a local Chromium instance via Chrome DevTools Protocol (`Page.printToPDF`) to render true vector typography instead of pixelated canvas screenshots.
+* **Spatial Layout Calculator**: Automatically computes canvas node bounds, relative offsets, and SVG path bezier curves to reconstruct complex spatial layouts onto a unified document.
+* **Local Processing**: Communication with the browser engine occurs strictly via local loopback (`127.0.0.1`).
+* **Headless Browser Flags**: Spawns Chrome with `--no-first-run --no-default-browser-check --disable-extensions` to prevent background telemetry.
+
+</details>
+
+---
+
+## 🔍 Known Behaviors & Edge Cases
+
+* **Multi-Page Embedded PDFs**: Obsidian virtualizes PDF cards when zoomed out to save GPU memory. For multi-page PDF nodes, zoom in on the canvas once before exporting so Obsidian loads all pages into memory.
+* **Ultra-Wide Canvas Viewing**: When exporting extremely large layouts exceeding 200 inches, Adobe Acrobat Reader enforces single-page size limits. Open ultra-wide PDFs in Google Chrome or Microsoft Edge for smooth scaling.
+
+---
+
+## 🛡️ Privacy & Security
+
+This plugin does not collect, store, or transmit any telemetry or user data. All processing happens locally on your machine. When a canvas contains web link cards or web embeds, your local browser loads those specific web pages directly from their origin servers over HTTPS.
+
+---
+
+## 📄 License
+
+Distributed under the [GNU General Public License v3.0 (GPLv3)](LICENSE).
