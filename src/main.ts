@@ -9,7 +9,6 @@ export default class CanvasToPdfPlugin extends Plugin {
     settings: VectorPdfSettings;
 
     async onload() {
-        new Notice("Canvas to PDF v1.0.0 loaded!");
         await this.loadSettings();
 
         // Add settings tab
