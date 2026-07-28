@@ -1,7 +1,7 @@
 {
   "name": "canvas-to-pdf",
-  "version": "1.0.0",
-  "description": "Export Obsidian canvases into clean, searchable vector PDF and HTML documents directly on your computer.",
+  "version": "1.0.1",
+  "description": "Export canvases into clean, searchable vector PDF and HTML documents directly on your computer.",
   "main": "main.js",
   "scripts": {
     "dev": "node esbuild.config.mjs",

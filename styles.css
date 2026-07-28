@@ -4,6 +4,24 @@
     padding: 18px 0;
 }
 
+.canvas-to-pdf-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.canvas-to-pdf-modal-header h2 {
+    margin-top: 0;
+}
+
+.canvas-to-pdf-tip {
+    margin-top: 12px;
+    margin-bottom: 8px;
+    font-size: var(--font-ui-smaller);
+    color: var(--text-muted);
+    text-align: center;
+}
+
 .canvas-to-pdf-modal .setting-item-name {
     font-size: var(--font-ui-medium);
 }

@@ -34,16 +34,8 @@ export class ExportModal extends Modal {
         contentEl.addClass('canvas-to-pdf-modal');
 
         const headerContainer = contentEl.createDiv({ cls: 'canvas-to-pdf-modal-header' });
-        headerContainer.style.display = 'flex';
-        headerContainer.style.justifyContent = 'space-between';
-        headerContainer.style.alignItems = 'baseline';
-
         headerContainer.createEl('h2', { text: 'Export canvas', cls: 'canvas-to-pdf-modal-title' });
-        headerContainer.createEl('span', { text: 'v1.0.0', cls: 'text-muted' });
-
-        // Remove the top margin from the h2 so it aligns well
-        const h2El = headerContainer.querySelector('h2');
-        if (h2El) h2El.style.marginTop = '0';
+        headerContainer.createEl('span', { text: 'v1.0.1', cls: 'text-muted' });
 
         new Setting(contentEl)
             .setName('File name')
@@ -132,12 +124,7 @@ export class ExportModal extends Modal {
                     this.resultHighResWebviews = value;
                 }));
 
-        const tipEl = contentEl.createEl('div', { cls: 'setting-item-description' });
-        tipEl.style.marginTop = '12px';
-        tipEl.style.marginBottom = '8px';
-        tipEl.style.fontSize = 'var(--font-ui-smaller)';
-        tipEl.style.color = 'var(--text-muted)';
-        tipEl.style.textAlign = 'center';
+        const tipEl = contentEl.createEl('div', { cls: 'setting-item-description canvas-to-pdf-tip' });
         tipEl.innerText = '💡 Tip: Additional options (nested canvas depth, default path) can be changed in Plugin Settings.';
 
         new Setting(contentEl)

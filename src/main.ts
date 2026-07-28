@@ -233,11 +233,16 @@ export default class CanvasToPdfPlugin extends Plugin {
                 fullPath += '/';
             }
 
-            // Create folder if it doesn't exist
+            // Create folder (and all parent folders) if they don't exist
             if (fullPath) {
-                const folderExists = this.app.vault.getAbstractFileByPath(fullPath.slice(0, -1));
-                if (!folderExists) {
-                    await this.app.vault.createFolder(fullPath.slice(0, -1));
+                const parts = fullPath.split('/').filter(p => p.trim().length > 0);
+                let currentPath = '';
+                for (const part of parts) {
+                    currentPath += (currentPath ? '/' : '') + part;
+                    const folderExists = this.app.vault.getAbstractFileByPath(currentPath);
+                    if (!folderExists) {
+                        await this.app.vault.createFolder(currentPath);
+                    }
                 }
             }
 

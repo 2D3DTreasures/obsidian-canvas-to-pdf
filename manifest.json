@@ -1,9 +1,9 @@
 {
   "id": "canvas-to-pdf",
   "name": "Canvas to PDF",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "minAppVersion": "1.4.0",
-  "description": "Export Obsidian canvases into clean, searchable vector PDF and HTML documents directly on your computer.",
+  "description": "Export canvases into clean, searchable vector PDF and HTML documents directly on your computer.",
   "author": "2D3DTreasures",
   "isDesktopOnly": true
 }

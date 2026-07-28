@@ -2,6 +2,12 @@ const bufferToBase64 = (buf: ArrayBuffer) => Buffer.from(buf).toString('base64')
 import { App, TFile, Notice, MarkdownRenderer, Component, requestUrl } from 'obsidian';
 import { CanvasData, CanvasNode, GroupNode, TextNode, FileNode, LinkNode, CanvasEdge, BoundingBox } from './types';
 
+function setStyles(el: HTMLElement, styles: Record<string, string>) {
+    for (const [key, val] of Object.entries(styles)) {
+        (el.style as any)[key] = val;
+    }
+}
+
 async function renderPdfFileToDataUrl(app: App, tfile: TFile, subpath?: string): Promise<string | null> {
     try {
         const arrayBuffer = await app.vault.readBinary(tfile);
@@ -263,27 +269,54 @@ async function processMarkdownIframes(app: App, wrapper: HTMLElement) {
                     const parent = iframe.parentNode;
                     if (parent) {
                         const replaceDiv = document.createElement('div');
-                        replaceDiv.style.position = 'relative';
-                        replaceDiv.style.width = iframe.getAttribute('width') ? (iframe.getAttribute('width')?.includes('%') ? iframe.getAttribute('width')! : iframe.getAttribute('width') + 'px') : '100%';
-                        replaceDiv.style.height = iframe.getAttribute('height') ? (iframe.getAttribute('height')?.includes('%') ? iframe.getAttribute('height')! : iframe.getAttribute('height') + 'px') : '100%';
-                        replaceDiv.style.backgroundColor = '#000';
-                        replaceDiv.style.display = 'flex';
-                        replaceDiv.style.alignItems = 'center';
-                        replaceDiv.style.justifyContent = 'center';
-                        replaceDiv.style.overflow = 'hidden';
-                        replaceDiv.style.borderRadius = '8px';
+                        setStyles(replaceDiv, {
+                            position: 'relative',
+                            width: iframe.getAttribute('width') ? (iframe.getAttribute('width')?.includes('%') ? iframe.getAttribute('width')! : iframe.getAttribute('width') + 'px') : '100%',
+                            height: iframe.getAttribute('height') ? (iframe.getAttribute('height')?.includes('%') ? iframe.getAttribute('height')! : iframe.getAttribute('height') + 'px') : '100%',
+                            backgroundColor: '#000',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            overflow: 'hidden',
+                            borderRadius: '8px'
+                        });
 
-                        replaceDiv.innerHTML = `
-                            <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" style="display: block; width: 100%; height: 100%; text-decoration: none;">
-                                <img src="${dataUrl}" style="width: 100%; height: 100%; object-fit: contain; border: none; display: block; opacity: 0.85;" />
-                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                                    <svg width="68" height="48" viewBox="0 0 68 48" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#ff0000"></path>
-                                        <path d="M 45,24 27,14 27,34" fill="#ffffff"></path>
-                                    </svg>
-                                </div>
-                            </a>
-                        `;
+                        const link = replaceDiv.createEl('a', {
+                            href: `https://www.youtube.com/watch?v=${videoId}`
+                        });
+                        link.target = '_blank';
+                        setStyles(link, {
+                            display: 'block',
+                            width: '100%',
+                            height: '100%',
+                            textDecoration: 'none'
+                        });
+
+                        const img = link.createEl('img');
+                        img.src = dataUrl;
+                        setStyles(img, {
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'contain',
+                            border: 'none',
+                            display: 'block',
+                            opacity: '0.85'
+                        });
+
+                        const iconDiv = link.createDiv();
+                        setStyles(iconDiv, {
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)'
+                        });
+
+                        const svg = iconDiv.createSvg('svg', {
+                            attr: { width: '68', height: '48', viewBox: '0 0 68 48', version: '1.1', xmlns: 'http://www.w3.org/2000/svg' }
+                        });
+                        svg.createSvg('path', { attr: { d: 'M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z', fill: '#ff0000' } });
+                        svg.createSvg('path', { attr: { d: 'M 45,24 27,14 27,34', fill: '#ffffff' } });
+
                         parent.replaceChild(replaceDiv, iframe);
                     }
                 } catch (e) {
@@ -898,12 +931,14 @@ async function renderPhantomMarkdown(
 ): Promise<string> {
     const outer = document.createElement('div');
     outer.className = `canvas-node ${extraClass}`;
-    outer.style.position = 'absolute';
-    outer.style.left = '-99999px';
-    outer.style.width = width + 'px';
-    outer.style.height = height + 'px';
-    outer.style.setProperty('--canvas-node-height', height + 'px');
-    outer.style.visibility = 'hidden';
+    setStyles(outer, {
+        position: 'absolute',
+        left: '-99999px',
+        width: `${width}px`,
+        height: `${height}px`,
+        visibility: 'hidden'
+    });
+    outer.style.setProperty('--canvas-node-height', `${height}px`);
 
     const innerContainer = document.createElement('div');
     innerContainer.className = 'canvas-node-container';
