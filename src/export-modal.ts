@@ -35,7 +35,7 @@ export class ExportModal extends Modal {
 
         const headerContainer = contentEl.createDiv({ cls: 'canvas-to-pdf-modal-header' });
         headerContainer.createEl('h2', { text: 'Export canvas', cls: 'canvas-to-pdf-modal-title' });
-        headerContainer.createEl('span', { text: 'v1.0.1', cls: 'text-muted' });
+        headerContainer.createEl('span', { text: 'v1.0.2', cls: 'text-muted' });
 
         new Setting(contentEl)
             .setName('File name')

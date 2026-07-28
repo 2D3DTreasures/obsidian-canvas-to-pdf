@@ -2,11 +2,7 @@ const bufferToBase64 = (buf: ArrayBuffer) => Buffer.from(buf).toString('base64')
 import { App, TFile, Notice, MarkdownRenderer, Component, requestUrl } from 'obsidian';
 import { CanvasData, CanvasNode, GroupNode, TextNode, FileNode, LinkNode, CanvasEdge, BoundingBox } from './types';
 
-function setStyles(el: HTMLElement, styles: Record<string, string>) {
-    for (const [key, val] of Object.entries(styles)) {
-        (el.style as any)[key] = val;
-    }
-}
+
 
 async function renderPdfFileToDataUrl(app: App, tfile: TFile, subpath?: string): Promise<string | null> {
     try {
@@ -230,13 +226,12 @@ async function processMarkdownImages(app: App, wrapper: HTMLElement, sourcePath:
                 if (['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'bmp'].includes(ext)) {
                     const img = document.createElement('img');
                     img.src = await getFileExportUrl(app, linkedFile, settings);
-                    img.style.maxWidth = '100%';
-                    img.style.objectFit = 'contain';
+                    img.setCssStyles({ maxWidth: '100%', objectFit: 'contain' });
                     embed.replaceWith(img);
                 } else if (ext === 'base') {
                     // Bases require Obsidian's live view system; render a visible placeholder
                     const placeholder = document.createElement('div');
-                    placeholder.style.cssText = 'padding: 12px; border: 1px dashed var(--text-faint); border-radius: 8px; color: var(--text-muted); font-style: italic; text-align: center; margin: 8px 0;';
+                    placeholder.setCssStyles({ padding: '12px', border: '1px dashed var(--text-faint)', borderRadius: '8px', color: 'var(--text-muted)', fontStyle: 'italic', textAlign: 'center', margin: '8px 0' });
                     placeholder.textContent = `📊 Base: ${linkedFile.basename} (cannot be exported statically)`;
                     embed.replaceWith(placeholder);
                 }
@@ -269,7 +264,7 @@ async function processMarkdownIframes(app: App, wrapper: HTMLElement) {
                     const parent = iframe.parentNode;
                     if (parent) {
                         const replaceDiv = document.createElement('div');
-                        setStyles(replaceDiv, {
+                        replaceDiv.setCssStyles({
                             position: 'relative',
                             width: iframe.getAttribute('width') ? (iframe.getAttribute('width')?.includes('%') ? iframe.getAttribute('width')! : iframe.getAttribute('width') + 'px') : '100%',
                             height: iframe.getAttribute('height') ? (iframe.getAttribute('height')?.includes('%') ? iframe.getAttribute('height')! : iframe.getAttribute('height') + 'px') : '100%',
@@ -285,7 +280,7 @@ async function processMarkdownIframes(app: App, wrapper: HTMLElement) {
                             href: `https://www.youtube.com/watch?v=${videoId}`
                         });
                         link.target = '_blank';
-                        setStyles(link, {
+                        link.setCssStyles({
                             display: 'block',
                             width: '100%',
                             height: '100%',
@@ -294,7 +289,7 @@ async function processMarkdownIframes(app: App, wrapper: HTMLElement) {
 
                         const img = link.createEl('img');
                         img.src = dataUrl;
-                        setStyles(img, {
+                        img.setCssStyles({
                             width: '100%',
                             height: '100%',
                             objectFit: 'contain',
@@ -304,7 +299,7 @@ async function processMarkdownIframes(app: App, wrapper: HTMLElement) {
                         });
 
                         const iconDiv = link.createDiv();
-                        setStyles(iconDiv, {
+                        iconDiv.setCssStyles({
                             position: 'absolute',
                             top: '50%',
                             left: '50%',
@@ -448,8 +443,7 @@ ${getObsidianStyles()}
         const resolveCanvasColor = (colorNum: string): string => {
             const probe = document.createElement('div');
             probe.className = `canvas-node is-themed mod-canvas-color-${colorNum}`;
-            probe.style.position = 'absolute';
-            probe.style.visibility = 'hidden';
+            probe.setCssStyles({ position: 'absolute', visibility: 'hidden' });
             document.body.appendChild(probe);
             const resolved = getComputedStyle(probe).getPropertyValue('--canvas-color').trim();
             document.body.removeChild(probe);
@@ -687,10 +681,8 @@ ${getObsidianStyles()}
                                                 const dataUrl = orig.toDataURL('image/jpeg', 0.9);
                                                 const img = document.createElement('img');
                                                 img.src = dataUrl;
-                                                img.style.cssText = cloneCanvas.style.cssText;
-                                                img.style.width = '100%';
-                                                img.style.height = '100%';
-                                                img.style.display = 'block';
+                                                img.setAttribute('style', cloneCanvas.getAttribute('style') || '');
+                                                img.setCssStyles({ width: '100%', height: '100%', display: 'block' });
                                                 img.className = cloneCanvas.className;
                                                 // We intentionally don't set img.width/img.height attributes 
                                                 // to avoid retina-scale pixel expansion, relying on CSS instead.
@@ -717,14 +709,10 @@ ${getObsidianStyles()}
 
                                             const clonedPdfViewer = clone.querySelector('.pdfViewer') as HTMLElement;
                                             if (clonedPdfViewer) {
-                                                clonedPdfViewer.style.transform = `translate(${-totalScrollLeft}px, ${-totalScrollTop}px)`;
+                                                clonedPdfViewer.setCssStyles({ transform: `translate(${-totalScrollLeft}px, ${-totalScrollTop}px)` });
                                             }
 
-                                            clone.style.width = '100%';
-                                            clone.style.height = '100%';
-                                            clone.style.position = 'absolute';
-                                            clone.style.top = '0';
-                                            clone.style.left = '0';
+                                            clone.setCssStyles({ width: '100%', height: '100%', position: 'absolute', top: '0', left: '0' });
 
                                             html += `<div class="canvas-node-content" style="position: relative; overflow: hidden !important; background: var(--background-primary);">`;
                                             html += clone.outerHTML;
@@ -931,14 +919,14 @@ async function renderPhantomMarkdown(
 ): Promise<string> {
     const outer = document.createElement('div');
     outer.className = `canvas-node ${extraClass}`;
-    setStyles(outer, {
+    outer.setCssStyles({
         position: 'absolute',
         left: '-99999px',
         width: `${width}px`,
         height: `${height}px`,
         visibility: 'hidden'
     });
-    outer.style.setProperty('--canvas-node-height', `${height}px`);
+    outer.setCssProps({ '--canvas-node-height': `${height}px` });
 
     const innerContainer = document.createElement('div');
     innerContainer.className = 'canvas-node-container';
